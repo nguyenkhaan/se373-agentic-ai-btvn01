@@ -2,5 +2,8 @@ POST http://localhost:5013/api/triage
 Content-Type: application/json
 
 {
-    "issue": "Xin chào"
+    "issue": "Nút thanh toán trả HTTP 500 với mọi thẻ Visa từ 14:30."
 }
+
+###
+GET http://localhost:5013/api/measure-token
