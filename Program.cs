@@ -21,6 +21,10 @@ builder.Services.AddHttpClient<MinimalTriageService>((_, client) =>
 {
     client.BaseAddress = new Uri($"{modelConfiguration.BaseUrl.TrimEnd('/')}/");
 });
+builder.Services.AddHttpClient<FunctionCallingService>((_, client) =>
+{
+    client.BaseAddress = new Uri($"{modelConfiguration.BaseUrl.TrimEnd('/')}/");
+});
 // builder.Services.AddScoped<MinimalTriageService>();
 builder.Services.AddControllers();
 var app = builder.Build();
