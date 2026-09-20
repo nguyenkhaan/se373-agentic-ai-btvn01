@@ -8,7 +8,7 @@ using IssueTriage.src.Services;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/triage")]
+[Route("api/minimal-triage")]
 public class MinimalTriageController(MinimalTriageService minimalTriageService) : ControllerBase
 {
     [HttpPost]

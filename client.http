@@ -1,4 +1,4 @@
-POST http://localhost:5013/api/triage
+POST http://localhost:5013/api/minimal-triage
 Content-Type: application/json
 
 {
