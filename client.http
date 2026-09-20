@@ -7,3 +7,11 @@ Content-Type: application/json
 
 ###
 GET http://localhost:5013/api/measure-token
+
+###
+POST http://localhost:5013/api/triage
+Content-Type: application/json
+
+{
+    "issue": "Nút thanh toán trả HTTP 500 với mọi thẻ Visa từ 14:30. Hãy triage issue và cho biết team nào cần xử lý."
+}

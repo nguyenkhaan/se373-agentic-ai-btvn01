@@ -1,0 +1,70 @@
+@page "/"
+@model IssueTriage.src.Pages.Pages.IndexModel
+@using System.Text.Json
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Issue Triage";
+}
+
+<style>
+    body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #1f2937; }
+    textarea { box-sizing: border-box; width: 100%; min-height: 180px; padding: .75rem; font: inherit; }
+    button { margin-top: .75rem; padding: .7rem 1rem; border: 0; border-radius: .35rem; background: #15803d; color: white; font: inherit; cursor: pointer; }
+    .error { color: #b91c1c; } .success { color: #166534; } .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .card, details { margin-top: 1rem; padding: 1rem; border: 1px solid #d1d5db; border-radius: .5rem; }
+    .metric { font-size: 1.25rem; font-weight: 700; } pre { overflow: auto; background: #f3f4f6; padding: .75rem; }
+</style>
+
+<h1>Issue Triage</h1>
+<p>Demo 04 — model đề xuất tool call; application kiểm tra rồi mới thực thi.</p>
+
+<form method="post">
+    <label asp-for="Issue">Mô tả issue</label>
+    <textarea asp-for="Issue" placeholder="Nêu symptom, phạm vi ảnh hưởng và thời điểm bắt đầu."></textarea>
+    <span class="error" asp-validation-for="Issue"></span>
+    <br />
+    <button type="submit">Phân loại issue</button>
+</form>
+
+@if (Model.ErrorMessage is not null)
+{
+    <p class="error" role="alert">@Model.ErrorMessage</p>
+}
+
+@if (Model.Result is not null)
+{
+    <p class="success">Application đã hoàn tất function-calling flow.</p>
+
+    @if (Model.Result.ToolTraces.Count > 0)
+    {
+        var firstTrace = Model.Result.ToolTraces[0];
+        <div class="grid">
+            <section class="card">
+                <div>Component đã xác thực</div>
+                <div class="metric">@firstTrace.Result["component"]</div>
+            </section>
+            <section class="card">
+                <div>Team phụ trách</div>
+                <div class="metric">@firstTrace.Result["owner"]</div>
+            </section>
+        </div>
+
+        <details open>
+            <summary>Trace function calling</summary>
+            @foreach (var trace in Model.Result.ToolTraces)
+            {
+                <h3>Model yêu cầu tool: <code>@trace.Name</code></h3>
+                <p>Call ID: <code>@trace.CallID</code></p>
+                <strong>Arguments</strong>
+                <pre>@JsonSerializer.Serialize(trace.Arguments, new JsonSerializerOptions { WriteIndented = true })</pre>
+                <strong>Application validate và thực thi</strong>
+                <pre>@JsonSerializer.Serialize(trace.Result, new JsonSerializerOptions { WriteIndented = true })</pre>
+            }
+        </details>
+    }
+
+    <section class="card">
+        <h2>Kết quả triage</h2>
+        <div style="white-space: pre-wrap">@(Model.Result.FinalResponse ?? "(Model returned no text.)")</div>
+    </section>
+}

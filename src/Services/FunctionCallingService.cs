@@ -17,24 +17,31 @@ public class FunctionCallingService(HttpClient httpClient , ModelConfiguration m
         ["search"] = "search-platform",
     };
     private static readonly object[] FunctionTools = [
-        new {
-            type = "function",
-            function = new {
-                name = "get_component_owner",
-                description = "Trả team chịu trách nhiệm cho một software component. Chỉ dùng component trong danh sách schema"
-            },
-            parameters = new {
-                type = "object",
-                properties = new {
-
-                    component = new { type = "string" ,@enum = ComponentOwner.Keys.ToArray(), }
-                },
-                require = new[] {"component"},
-                additionalProperties = false,
-            },
-            strict = true
-        }
-    ];
+        new
+            {
+                type = "function",
+                function = new
+                {
+                    name = "get_component_owner",
+                    description = "Trả team chịu trách nhiệm cho một software component.",
+                    parameters = new
+                    {
+                        type = "object",
+                        properties = new
+                        {
+                            component = new
+                            {
+                                type = "string",
+                                @enum = new[] { "payment", "identity", "search" }
+                            }
+                        },
+                        required = new[] { "component" },
+                        additionalProperties = false
+                    },
+                    strict = true
+                }
+            }
+        ];
     private const string SystemPrompt = """
         Bạn hỗ trợ triage issue phần mềm.
         Khi cần biết team xử lý một component, hãy gọi get_component_owner.

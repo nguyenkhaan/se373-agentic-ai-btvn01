@@ -27,6 +27,8 @@ builder.Services.AddHttpClient<FunctionCallingService>((_, client) =>
 });
 // builder.Services.AddScoped<MinimalTriageService>();
 builder.Services.AddControllers();
+builder.Services.AddRazorPages(options => options.RootDirectory = "/src/Pages");
 var app = builder.Build();
 app.MapControllers();
+app.MapRazorPages();
 app.Run();
